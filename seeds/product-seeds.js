@@ -8,6 +8,12 @@ const productData = [
     category_id: 1,
   },
   {
+    product_name: 'Polo T-Shirt',
+    price: 34.99,
+    stock: 8,
+    category_id: 1,
+  },
+  {
     product_name: 'Running Sneakers',
     price: 90.0,
     stock: 25,
