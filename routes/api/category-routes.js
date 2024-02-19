@@ -12,6 +12,7 @@ router.get('/', async(req, res) => {
     });
     res.status(200).json(categoryData);
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 
@@ -31,6 +32,7 @@ router.get('/:id', async (req, res) => {
       res.status(404).json({ message: `No catagories found for given id ${id}!` });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 });
@@ -41,13 +43,11 @@ router.post('/', async (req, res) => {
   // if(!req.body.category_name){
     res.status(400).json({message: "Category Name cannot be empty!"});
   }else{
-    const newCategory = {
-      category_name: req.body.category_name
-    };
     try {
-      const categoryData = await Category.create(newCategory);
+      const categoryData = await Category.create(req.body);
       res.status(200).json(categoryData);
     } catch (error) {
+      console.log(error);
       res.status(500).json(error);
     }
   }
@@ -59,11 +59,8 @@ router.put('/:id', async (req, res) => {
   if(req.body.category_name.trim().length === 0){
     res.status(400).json({message: "Category Name cannot be empty!"});
   }else{
-    const newCategory = {
-      category_name: req.body.category_name
-    };
     try {
-      const categoryData = await Category.update(newCategory,{
+      const categoryData = await Category.update(req.body,{
         where:{
           id : categoryId
         } 
@@ -74,6 +71,7 @@ router.put('/:id', async (req, res) => {
         res.status(200).json(categoryData);
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json(error);
     }
   }
@@ -94,6 +92,7 @@ router.delete('/:id', async (req, res) => {
       res.status(200).json(categoryData);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 });
