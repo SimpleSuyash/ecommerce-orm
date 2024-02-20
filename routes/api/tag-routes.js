@@ -65,13 +65,18 @@ router.put('/:id', async (req, res) => {
   } else {
     try {
       const newTag = {"tag_name": req.body.tag_name.trim()};
-      const tagData = await Tag.update(newTag, {
+      const upgradeTagData = await Tag.update(newTag, {
         where: {
           id: tagId
         }
       });
-      if (!tagData[0]) {
-        res.status(404).json({ message: `No tags were updated with given id ${tagId}!` });
+      const tagData = await Tag.findByPk(tagId);
+      //when updata data is same as existing data
+      if (tagData && !upgradeTagData[0]) {
+        res.status(400).json({ message: `No tags were updated with given id ${tagId}!` });
+      //when update id doesn't exist
+      }else if (! tagData && !upgradeTagData[0]) {
+        res.status(404).json({ message: `No tags were found with given id ${tagId}!` });
       } else {
         res.status(200).json(tagData);
       }
