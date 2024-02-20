@@ -37,7 +37,7 @@ This app builds `Node.js` Restful CRUD `API`s using `Express`, `Sequelize` with 
     ```
     npm i
     ```
-1. Create your Project/Repo folder, and paste all the contents of `Develop` from the starter code.
+1. Create your Project/Repo folder, and paste all the contents of `Develop` from the starter code. Delete the Develop folder.
 
 1. Change the  `.env.EXAMPLE` file to `.env`, and  type in your `database name`, `user` and `password`
 1. Before starting the development of the project, run the following in the terminal in the root directory of the project. Every time code changes, the server will automatically restart.
@@ -95,3 +95,6 @@ Screenshot showing the `Get All Products` endpoint being tested in Postman
 
 
 ## Demo            
+https://github.com/SimpleSuyash/ecommerce-orm/assets/149545043/f43d0865-70b1-4dd8-814e-576992bca2e7
+
+
