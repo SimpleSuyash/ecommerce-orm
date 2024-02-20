@@ -19,6 +19,11 @@ ProductTag.init(
       references: {
         model: "product",
         key: "id"
+      },
+      validate:{
+        notNull:{
+          msg:"Product Id is required!"
+        }
       }
     },
     tag_id:{
@@ -27,6 +32,11 @@ ProductTag.init(
       references: {
         model: "tag",
         key: "id"
+      },
+      validate:{
+        notNull:{
+          msg:"Tag id is required!"
+        }
       }
     }
   },

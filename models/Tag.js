@@ -15,6 +15,15 @@ Tag.init(
     },
     tag_name :{
       type: DataTypes.STRING,
+      allowNull: false,
+      validate:{
+        notNull:{
+          msg:"Tag name is required!"
+        },
+        notEmpty:{
+          msg: "Please provide Tag name!"
+        }
+      }
     }
   },
   {
