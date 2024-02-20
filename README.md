@@ -1,6 +1,6 @@
 
 [![Express JS](https://img.shields.io/badge/express.js-blue?style=for-the-badge&logo=express&logoColor=white&labelColor=red)](https://expressjs.com/) [![node.js](https://img.shields.io/badge/Node.js-blue?style=for-the-badge&logo=Node.js&logoColor=white&labelColor=red)](https://nodejs.org/en) [![npm](https://img.shields.io/badge/npm-blue?style=for-the-badge&logo=npm&logoColor=white&labelColor=red)](https://www.npmjs.com/)
-[![mysql](https://img.shields.io/badge/mysql-blue?style=for-the-badge&logo=mysql&logoColor=white&labelColor=red)](https://www.mysql.com/) [![dotenv](https://img.shields.io/badge/dotenv-blue?style=for-the-badge&logo=dotenv&logoColor=white&labelColor=red)](https://www.npmjs.com/package/dotenv)
+[![mysql](https://img.shields.io/badge/mysql-blue?style=for-the-badge&logo=mysql&logoColor=white&labelColor=red)](https://www.mysql.com/) [![dotenv](https://img.shields.io/badge/dotenv-blue?style=for-the-badge&logo=dotenv&logoColor=white&labelColor=red)](https://www.npmjs.com/package/dotenv) [![sequelize](https://img.shields.io/badge/sequelize-blue?style=for-the-badge&logo=sequelize&logoColor=white&labelColor=red)](https://sequelize.org/api/v6/identifiers)
 
 
 <div align="right"> 
