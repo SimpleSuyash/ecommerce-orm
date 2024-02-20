@@ -1,4 +1,4 @@
-// import important parts of sequelize library
+9 // import important parts of sequelize library
 const { Model, DataTypes, DECIMAL, INTEGER } = require('sequelize');
 // import our database connection from config.js
 const sequelize = require('../config/connection');
@@ -43,7 +43,7 @@ Product.init(
           msg: "Please provide price value!"
         },
         min:{
-          args: 0,
+          args: [0],
           msg:"Price must be greater than or equal to 0!"
         }
       }
@@ -54,8 +54,8 @@ Product.init(
       allowNull: false,
       defaultValue: 10,
       validate:{
-        isNumeric:{
-          msg: "Stock must be a numeric value!"
+        isInt:{
+          msg: "Stock must be an integer value!"
         },
         notNull:{
           msg:"Stock is required!"
@@ -64,7 +64,7 @@ Product.init(
           msg: "Please provide stock value!"
         },
         min:{
-          args: 0,
+          args: [0],
           msg:"Stock must be greater than or equal to 0!"
         }
       }
