@@ -39,12 +39,14 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   // creates a new category
-  if(req.body.category_name.trim().length === 0){
-  // if(!req.body.category_name){
+  if(!req.body.category_name){
+    res.status(400).json({message: "Category Name is required!"});
+  }else if(req.body.category_name.trim().length === 0){
     res.status(400).json({message: "Category Name cannot be empty!"});
   }else{
     try {
-      const categoryData = await Category.create(req.body);
+      const newCategory = {"category_name": req.body.category_name.trim()};
+      const categoryData = await Category.create(newCategory);
       res.status(200).json(categoryData);
     } catch (error) {
       console.log(error);
@@ -56,11 +58,14 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   // updates a category by its `id` value
   const categoryId = req.params.id;
-  if(req.body.category_name.trim().length === 0){
+  if(!req.body.category_name){
+    res.status(400).json({message: "Category Name is required!"});
+  }else if(req.body.category_name.trim().length === 0){
     res.status(400).json({message: "Category Name cannot be empty!"});
   }else{
     try {
-      const categoryData = await Category.update(req.body,{
+      const newCategory = {"category_name": req.body.category_name.trim()};
+      const categoryData = await Category.update(newCategory,{
         where:{
           id : categoryId
         } 
