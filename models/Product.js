@@ -1,5 +1,5 @@
 // import important parts of sequelize library
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes, DECIMAL, INTEGER } = require('sequelize');
 // import our database connection from config.js
 const sequelize = require('../config/connection');
 
@@ -17,18 +17,57 @@ Product.init(
     },
     product_name:{
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      allowNull: false,
+      validate:{
+        notNull:{
+          msg:"Product name is required!"
+        },
+        notEmpty:{
+          msg: "Please provide Product name!"
+        }
+      }
     },
     price:{
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        // isDecimal: true
+        isDecimal:{
+          msg: "Price must be a decimal value!"
+        },
+        notNull:{
+          msg:"Price is required!"
+        },
+        notEmpty:{
+          msg: "Please provide price value!"
+        },
+        min:{
+          args: 0,
+          msg:"Price must be greater than or equal to 0!"
+        }
+      }
       //validates that the value is a decimal
     },
     stock:{
       type:DataTypes.INTEGER,
-      allowNull: false
-      //default value of 10
-      //validates that the value is numeric
+      allowNull: false,
+      defaultValue: 10,
+      validate:{
+        isNumeric:{
+          msg: "Stock must be a numeric value!"
+        },
+        notNull:{
+          msg:"Stock is required!"
+        },
+        notEmpty:{
+          msg: "Please provide stock value!"
+        },
+        min:{
+          args: 0,
+          msg:"Stock must be greater than or equal to 0!"
+        }
+      }
     },
     category_id:{
       type: DataTypes.INTEGER,
