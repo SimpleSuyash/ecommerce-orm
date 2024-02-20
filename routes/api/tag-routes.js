@@ -38,12 +38,15 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   // create a new tag
-  if (req.body.tag_name.trim().length === 0) {
+  if (!req.body.tag_name){
+    res.status(400).json({message: "Tag Name is required!"});
+  }else if (req.body.tag_name.trim().length === 0) {
     // if(!req.body.tag_name){
-    res.status(400).json({ message: "tag Name cannot be empty!" });
+    res.status(400).json({ message: "Tag Name cannot be empty!" });
   } else {
     try {
-      const tagData = await Tag.create(req.body);
+      const newTag = {"tag_name": req.body.tag_name.trim()};
+      const tagData = await Tag.create(newTag);
       res.status(200).json(tagData);
     } catch (error) {
       console.log(error);
@@ -55,11 +58,14 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   // updates a tag's name by its `id` value
   const tagId = req.params.id;
-  if (req.body.tag_name.trim().length === 0) {
+  if (!req.body.tag_name){
+    res.status(400).json({message: "Tag Name is required!"});
+  }else if (req.body.tag_name.trim().length === 0) {
     res.status(400).json({ message: "Tag Name cannot be empty!" });
   } else {
     try {
-      const tagData = await Tag.update(req.body, {
+      const newTag = {"tag_name": req.body.tag_name.trim()};
+      const tagData = await Tag.update(newTag, {
         where: {
           id: tagId
         }
