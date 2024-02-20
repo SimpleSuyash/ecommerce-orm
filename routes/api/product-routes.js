@@ -38,46 +38,91 @@ router.get('/:id', async (req, res) => {
 
 // create new product
 router.post('/', async (req, res) => {
- if(req.body.product_name.trim().length === 0){
-  res.status(400).json({message: "Product Name cannot be empty!"});
- }else{
-  try {
-    const product = await Product.create(req.body);
-    if (req.body.tag_ids.length) {
-      const productTagIdArr = req.body.tag_ids.map(tag_id => {
-        return {
-          product_id: product.id,
-          tag_id,
-        };
-      });
-      const productTagIds = await ProductTag.bulkCreate(productTagIdArr);
-      res.status(200).json(productTagIds);
-    }else{
-      // if no product tags, just respond
-      res.status(200).json(product);
+  const {product_name, price, stock, category_id, tag_ids} =req.body;
+
+  if (!(product_name && price && stock)) {
+    res.status(400).json({ message: "Product Name, Price and Stock are required!" });
+
+  } else if (product_name.trim().length === 0) {
+    res.status(400).json({ message: "Product Name cannot be empty!" });
+
+  } else if (Number.isNaN(price) || !Number.isInteger(stock)) {
+    res.status(400).json({ message: "Price and Stock must be numbers!" });
+
+  } else if (price < 0 || stock < 0) {
+    res.status(400).json({ message: "Price and Stock cannot be less than 0!" });
+
+  }else {
+    try {
+      const newProduct = {
+        product_name:product_name.trim(),
+        price,
+        stock,
+        category_id,
+        tag_ids
+      }
+      const productData = await Product.create(newProduct);
+      // const product = await Product.create(req.body);
+      // if there's product tags, we need to create pairings to bulk create in the ProductTag model
+      if (req.body.tag_ids && req.body.tag_ids.length) {
+        const productTagIdArr = req.body.tag_ids.map(tag_id => {
+          return {
+            product_id: product.id,
+            tag_id,
+          };
+        });
+        const productTagIds = await ProductTag.bulkCreate(productTagIdArr);
+        res.status(200).json(productTagIds);
+      } else {
+        // if no product tags, just respond
+        res.status(200).json(productData);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
-  } catch (error) {
-    console.log(error);
-    res.status(400).json(error);
   }
- }
 });
 
 // updates product
 router.put('/:id', async (req, res) => {
   // update product data
-  const productId =req.params.id;
-  if (req.body.product_name.trim().length === 0) {
+  const productId = req.params.id;
+  const {product_name, price, stock, category_id, tag_ids} =req.body;
+
+  if (!(product_name && price && stock)) {
+    res.status(400).json({ message: "Product Name, Price and Stock are required!" });
+
+  } else if (product_name.trim().length === 0) {
     res.status(400).json({ message: "Product Name cannot be empty!" });
-  } else {//----------------------------when product name not empty
+
+  } else if (Number.isNaN(price) || !Number.isInteger(stock)) {
+    res.status(400).json({ message: "Price and Stock must be numbers!" });
+
+  } else if (price < 0 || stock < 0) {
+    res.status(400).json({ message: "Price and Stock cannot be less than 0!" });
+
+  }else {//----------------------------when product name not empty
     try {
-      const productData = await Product.update(req.body, {
+      const productTagsBeforeUpdate = await ProductTag.findAll({
+        where: {
+          product_id: req.params.id
+        }
+      });
+      const newProduct = {
+        product_name:product_name.trim(),
+        price,
+        stock,
+        category_id,
+        tag_ids
+      }
+      const productData = await Product.update(newProduct, {
         where: {
           id: productId
         }
       });
-      if (req.body.tag_ids && req.body.tag_ids.length) {//-when tag_ids exist
-        //getting existing/current tags
+      if (tag_ids && tag_ids.length) {//-when tag_ids exist
+        //getting  tags after update
         const productTags = await ProductTag.findAll({
           where: {
             product_id: req.params.id
@@ -88,7 +133,7 @@ router.put('/:id', async (req, res) => {
         const productTagIds = productTags.map(({ tag_id }) => tag_id);
         //returns {product_id: ---, tag_id: ---}
         //returns only that doesn't exist in current tag_ids
-        const newProductTags = req.body.tag_ids
+        const newProductTags = tag_ids
           .filter((tag_id) => !productTagIds.includes(tag_id))
           .map((tag_id) => {
             return {
@@ -98,7 +143,7 @@ router.put('/:id', async (req, res) => {
           });
         // figure out which ones to remove
         const productTagsToRemove = productTags
-          .filter(({ tag_id }) => !req.body.tag_ids.includes(tag_id))
+          .filter(({ tag_id }) => !tag_ids.includes(tag_id))
           .map(({ id }) => id);
         // run both actions
         const updatedProductTags = await Promise.all([
@@ -109,12 +154,18 @@ router.put('/:id', async (req, res) => {
           }),
           ProductTag.bulkCreate(newProductTags),
         ]);
-        if(productTagsToRemove.length !== 0){
-          //only return response when tags were changed
-          return res.status(200).json(updatedProductTags);
-        }
+        // console.log("updated product tags")
+        // console.log(updatedProductTags[0]);
+        // if(updatedProductTags[0]!==0){
+        //   return res.status(200).json(updatedProductTags);
+        // }
+        // ``````workking when tags are deleted display 200 instead of 400``````
+        // }
       }//-----------------------------------end of if when tag_ids exist
-
+      // console.log(productTagsBeforeUpdate && !productData.tag_ids);
+      if(productTagsBeforeUpdate && !productData.tag_ids){
+        return res.status(200).json(productData);
+      }
       if (!productData[0]) {
         res.status(404).json({ message: `No products were updated with given id ${productId}!` });
       }else{
@@ -122,9 +173,9 @@ router.put('/:id', async (req, res) => {
       }
     } catch (error) {
       console.log(error);
-      res.status(400).json(error);
+      res.status(500).json(error);
     }
-  }
+  }//end of outer if
 });
 
 router.delete('/:id', async (req, res) => {

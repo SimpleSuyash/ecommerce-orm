@@ -65,13 +65,18 @@ router.put('/:id', async (req, res) => {
   }else{
     try {
       const newCategory = {"category_name": req.body.category_name.trim()};
-      const categoryData = await Category.update(newCategory,{
+      const upgradeCategoryData = await Category.update(newCategory,{
         where:{
           id : categoryId
         } 
       });
-      if (!categoryData[0]) {
-        res.status(404).json({ message: `No categories were updated with given id ${categoryId}!` });
+      const categoryData = await Category.findByPk(categoryId);
+      //when updata data is same as existing data
+      if (categoryData && !upgradeCategoryData[0]) {
+        res.status(400).json({ message: `No categories were updated with given id ${categoryId}!` });
+      //when update id doesn't exist
+      }else if (! categoryData && !upgradeCategoryData[0]) {
+        res.status(404).json({ message: `No categories were found with given id ${categoryId}!` });
       }else{
         res.status(200).json(categoryData);
       }
