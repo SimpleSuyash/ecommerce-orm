@@ -9,17 +9,16 @@
 
 # Ecommerce ORM   
 
-This app lets users write and save notes with title and description.
+This app creates a simple backend application of an internet retail company, so that various API endpoints can be tested in any API Clients such as `Postman`, `Insomnia`.
 
 ##  Description
 
 E-commerce websites are vital in the world of electronics industry. They facilate businesses and consumers in participating in the online transcation of electronic products. To support the ever-growing electronic industry, e-commerce platforms are being developed rapidly. So nowdays, developers' job certainly includes creating such technologies. 
 
-This app helps to uderstand the basic architecture of e-commerce sites. However, it does not deal with front-end user interface. The primary actor of this system is a manager of an internet retail company, and the use cases are read, create, view and delete categories, tags and products. 
+This app builds `Node.js` RESTful CRUD `API`s using `Express`, `Sequelize` ORM for `MySQL` database manipulation. `DotEnv` package is use to store sensitive data such as MySQL username, passwrod, database name etc.
 
-This app builds `Node.js` Restful CRUD `API`s using `Express`, `Sequelize` with `MySQL` database. `DotEnv` package is use to store sensitive data such as MySQL username, passwrod, database name etc.
-
-By creating this project, I learnt to implement `ORM`, which stands for `Object-Relational Mapping`. ORMs provide a higher-level abstraction, allowing developers to work with JavaScript objects and classes rather than writing complex SQL queries. I learnt to use `Sequelize` and create Restful APIs. I also learnt to use `Postman` to test the APIs.
+By creating this project, I learnt to implement `ORM`, which stands for `Object-Relational Mapping`. ORMs provide a higher-level abstraction, allowing developers to work with JavaScript objects and classes rather than writing complex SQL queries. I learnt to use `Sequelize` to define `Model`s, create association between them, create connection to the database and manipulate the data through various API endpoints.
+I also learnt to use `Postman` to test the APIs.
 
 
 ## Table of Contents
