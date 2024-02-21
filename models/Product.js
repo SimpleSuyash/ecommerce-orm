@@ -55,7 +55,7 @@ Product.init(
       defaultValue: 10,
       validate:{
         isInt:{
-          msg: "Stock must be an integer value!"
+          msg: "Stock must be an in                                                                                                                                                                     teger value!"
         },
         notNull:{
           msg:"Stock is required!"

@@ -7,10 +7,10 @@ router.get('/', async(req, res) => {
   // finds all categories
   // includes its associated Products
   try {
-    const categoryData = await Category.findAll({
+    const categories = await Category.findAll({
       include: [Product]
     });
-    res.status(200).json(categoryData);
+    res.status(200).json(categories);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
@@ -23,11 +23,11 @@ router.get('/:id', async (req, res) => {
   //  includes its associated Products
   const id = req.params.id;
   try {
-    const categoryData = await Category.findByPk(id,{
+    const category = await Category.findByPk(id,{
       include: [Product]
     });
-    if(categoryData){
-      res.status(200).json(categoryData);
+    if(category){
+      res.status(200).json(category);
     }else{
       res.status(404).json({ message: `No catagories found for given id ${id}!` });
     }
@@ -46,8 +46,8 @@ router.post('/', async (req, res) => {
   }else{
     try {
       const newCategory = {"category_name": req.body.category_name.trim()};
-      const categoryData = await Category.create(newCategory);
-      res.status(200).json(categoryData);
+      const category = await Category.create(newCategory);
+      res.status(200).json(category);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
@@ -58,27 +58,33 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   // updates a category by its `id` value
   const categoryId = req.params.id;
-  if(!req.body.category_name){
+  let category = await Category.findByPk(categoryId);
+
+  if(!category){
+    res.status(404).json({ message: `No categories were found with given id ${categoryId}!` });
+
+  }else if(!req.body.category_name){
     res.status(400).json({message: "Category Name is required!"});
+
   }else if(req.body.category_name.trim().length === 0){
     res.status(400).json({message: "Category Name cannot be empty!"});
+
   }else{
     try {
       const newCategory = {"category_name": req.body.category_name.trim()};
-      const upgradeCategoryData = await Category.update(newCategory,{
+      const updatedCategoryData = await Category.update(newCategory,{
         where:{
           id : categoryId
         } 
       });
-      const categoryData = await Category.findByPk(categoryId);
-      //when updata data is same as existing data
-      if (categoryData && !upgradeCategoryData[0]) {
+      console.log(updatedCategoryData);
+       // when updated data was same as previous data
+       if(!updatedCategoryData[0]) {
         res.status(400).json({ message: `No categories were updated with given id ${categoryId}!` });
-      //when update id doesn't exist
-      }else if (! categoryData && !upgradeCategoryData[0]) {
-        res.status(404).json({ message: `No categories were found with given id ${categoryId}!` });
-      }else{
-        res.status(200).json(categoryData);
+       }else {
+        //getting updated category data
+        category = await Category.findByPk(categoryId);
+        res.status(200).json(category);
       }
     } catch (error) {
       console.log(error);
