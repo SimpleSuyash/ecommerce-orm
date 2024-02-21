@@ -19,6 +19,8 @@ This app helps to uderstand the basic architecture of e-commerce sites. However,
 
 This app builds `Node.js` Restful CRUD `API`s using `Express`, `Sequelize` with `MySQL` database. `DotEnv` package is use to store sensitive data such as MySQL username, passwrod, database name etc.
 
+By creating this project, I learnt to implement `ORM`, which stands for `Object-Relational Mapping`. ORMs provide a higher-level abstraction, allowing developers to work with JavaScript objects and classes rather than writing complex SQL queries. I learnt to use `Sequelize` and create Restful APIs. I also learnt to use `Postman` to test the APIs.
+
 
 ## Table of Contents
 
