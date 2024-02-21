@@ -7,10 +7,10 @@ router.get('/', async (req, res) => {
   // finds all tags
   // includes its associated Product data
   try {
-    const tagData = await Tag.findAll({
+    const tags = await Tag.findAll({
       include: [Product]
     });
-    res.status(200).json(tagData);
+    res.status(200).json(tags);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
@@ -22,11 +22,11 @@ router.get('/:id', async (req, res) => {
   // includes its associated Product data
   const id = req.params.id;
   try {
-    const tagData = await Tag.findByPk(id, {
+    const tag = await Tag.findByPk(id, {
       include: [Product]
     });
-    if (tagData) {
-      res.status(200).json(tagData);
+    if (tag) {
+      res.status(200).json(tag);
     } else {
       res.status(404).json({ message: `No tags found for given id ${id}!` });
     }
@@ -46,8 +46,8 @@ router.post('/', async (req, res) => {
   } else {
     try {
       const newTag = {"tag_name": req.body.tag_name.trim()};
-      const tagData = await Tag.create(newTag);
-      res.status(200).json(tagData);
+      const tag = await Tag.create(newTag);
+      res.status(200).json(tag);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
@@ -58,27 +58,34 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   // updates a tag's name by its `id` value
   const tagId = req.params.id;
-  if (!req.body.tag_name){
+  let tag= await Tag.findByPk(tagId);
+
+  if(!tag){
+    res.status(404).json({ message: `No tags were found with given id ${tagId}!` });
+
+  }else if(!req.body.tag_name){
     res.status(400).json({message: "Tag Name is required!"});
+
   }else if (req.body.tag_name.trim().length === 0) {
     res.status(400).json({ message: "Tag Name cannot be empty!" });
+
   } else {
     try {
       const newTag = {"tag_name": req.body.tag_name.trim()};
-      const upgradeTagData = await Tag.update(newTag, {
+      const updatedTagData = await Tag.update(newTag, {
         where: {
           id: tagId
         }
       });
-      const tagData = await Tag.findByPk(tagId);
-      //when updata data is same as existing data
-      if (tagData && !upgradeTagData[0]) {
+      
+      // when updated data was same as previous data
+      if (!updatedTagData[0]) {
         res.status(400).json({ message: `No tags were updated with given id ${tagId}!` });
-      //when update id doesn't exist
-      }else if (! tagData && !upgradeTagData[0]) {
-        res.status(404).json({ message: `No tags were found with given id ${tagId}!` });
+
       } else {
-        res.status(200).json(tagData);
+        //getting the updated tag data
+        tag = await Tag.findByPk(tagId);
+        res.status(200).json(tag);
       }
     } catch (error) {
       console.log(error);
