@@ -95,6 +95,5 @@ Screenshot showing the `Get All Products` endpoint being tested in Postman
 
 
 ## Demo            
-https://github.com/SimpleSuyash/ecommerce-orm/assets/149545043/f43d0865-70b1-4dd8-814e-576992bca2e7
-
+https://github.com/SimpleSuyash/ecommerce-orm/assets/149545043/8f6e8344-2b58-415f-b56e-24ddb41f93b2
 
