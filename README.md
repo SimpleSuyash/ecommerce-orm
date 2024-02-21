@@ -68,7 +68,7 @@ To use this project,
     ```
     npm run start
     ```
-- Open the `Postman` to test the various API endpoints
+- Open the `Postman` to test the various API endpoints.    
     Some api endpoints are:
     - GET All Categories
         ```
